@@ -9,6 +9,7 @@
     "tailwindcss": "^4.1.10"
   },
   "dependencies": {
+    "mongodb": "^6.17.0",
     "ts-node": "^10.9.2"
   }
 }
