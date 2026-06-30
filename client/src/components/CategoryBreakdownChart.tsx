@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { PieChart as PieIcon, TrendingUp, TrendingDown } from "lucide-react";
+import { transactionAPI } from "../api";
 
 const COLORS = ["#22c55e", "#facc15"];
 
@@ -21,12 +22,7 @@ const CategoryBreakdownChart: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("/api/transactions/analytics", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
-        if (!res.ok) throw new Error("Failed to fetch analytics");
-        const result = await res.json();
+        const result = await transactionAPI.getAnalytics();
         setData(result.revenueExpenses || []);
       } catch (err) {
         setError("Failed to load category breakdown.");
