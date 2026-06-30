@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
+import { transactionAPI } from "../api";
 
 // Helper to map month number to name
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -21,14 +22,7 @@ const SummaryCards: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("/api/transactions/analytics", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
-        if (!res.ok) {
-          throw new Error(`Error: ${res.status} ${res.statusText}`);
-        }
-        const result = await res.json();
+        const result = await transactionAPI.getAnalytics();
         const trends: MonthlyTrend[] = result.monthlyTrends || [];
 
         // Find all years present in the data
