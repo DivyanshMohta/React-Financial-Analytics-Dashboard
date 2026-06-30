@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { TrendingUp, Calendar, Tag, DollarSign, CheckCircle, Clock } from "lucide-react";
+import { transactionAPI } from "../api";
 
 interface Transaction { 
   _id: string; 
@@ -20,12 +21,11 @@ const RecentTransactions: React.FC = () => {
       setLoading(true); 
       setError(null); 
       try { 
-        const token = localStorage.getItem("token"); 
-        const res = await fetch("/api/transactions?limit=5&sortBy=date&order=desc", { 
-          headers: token ? { Authorization: `Bearer ${token}` } : {}, 
-        }); 
-        if (!res.ok) throw new Error("Failed to fetch transactions"); 
-        const data = await res.json(); 
+       const data = await transactionAPI.getTransactions({
+          limit: "5",
+          sortBy: "date",
+          order: "desc",
+        });
         setTransactions(data.data || []); 
       } catch (err) { 
         setError("Failed to load recent transactions."); 
